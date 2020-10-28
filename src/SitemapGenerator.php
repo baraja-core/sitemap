@@ -10,21 +10,15 @@ use Nette\Caching\IStorage;
 
 final class SitemapGenerator
 {
+	private Config $config;
 
-	/** @var Config */
-	private $config;
+	private Cache $cache;
 
-	/** @var Cache */
-	private $cache;
+	private ?UrlLoader $commonUrlLoader;
 
-	/** @var UrlLoader|null */
-	private $commonUrlLoader;
+	private ?UrlLoader $customUrlLoader;
 
-	/** @var UrlLoader|null */
-	private $customUrlLoader;
-
-	/** @var SitemapRenderer|null */
-	private $sitemapRenderer;
+	private ?SitemapRenderer $sitemapRenderer;
 
 
 	public function __construct(IStorage $storage, ?UrlLoader $urlLoader = null)

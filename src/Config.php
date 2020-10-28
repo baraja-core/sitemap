@@ -7,9 +7,7 @@ namespace Baraja\Sitemap;
 
 final class Config
 {
-
-	/** @var string */
-	private $cacheExpirationTime = '5 minutes';
+	private string $cacheExpirationTime = '5 minutes';
 
 
 	public function getCacheExpirationTime(): string

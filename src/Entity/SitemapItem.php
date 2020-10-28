@@ -9,12 +9,9 @@ use Nette\Utils\Validators;
 
 final class SitemapItem
 {
+	private string $url;
 
-	/** @var string */
-	private $url;
-
-	/** @var \DateTime|null */
-	private $lastModificationDate;
+	private ?\DateTime $lastModificationDate;
 
 
 	public function __construct(string $url, ?\DateTime $lastModificationDate = null)
