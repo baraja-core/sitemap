@@ -16,9 +16,9 @@ final class SitemapGenerator
 
 	private ?UrlLoader $commonUrlLoader;
 
-	private ?UrlLoader $customUrlLoader;
+	private ?UrlLoader $customUrlLoader = null;
 
-	private ?SitemapRenderer $sitemapRenderer;
+	private ?SitemapRenderer $sitemapRenderer = null;
 
 
 	public function __construct(IStorage $storage, ?UrlLoader $urlLoader = null)
