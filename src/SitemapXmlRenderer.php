@@ -36,7 +36,13 @@ final class SitemapXmlRenderer implements SitemapRenderer
 
 
 	/**
-	 * Safe way how to render sitemap to XML with special characters escaping.
+	 * The method accepts an array of URLs and returns a valid XML sitemap.
+	 *
+	 * A simple and very fast method for generating an XML file.
+	 *
+	 * The method uses string concatenation, which is the fastest way to build an XML file
+	 * without relying on another library. During generation, special characters
+	 * are automatically escaped, the output is always valid and treated against an XSS attack.
 	 *
 	 * @param SitemapItem[] $urls
 	 */
