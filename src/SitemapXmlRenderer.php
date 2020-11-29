@@ -11,27 +11,9 @@ final class SitemapXmlRenderer implements SitemapRenderer
 	/**
 	 * @param SitemapItem[] $items
 	 */
-	public function render(array $items, bool $parted = false, int $pageOrder = 0, int $limit = 100): string
+	public function render(array $items, bool $parted = false, int $page = 0, int $limit = 100): string
 	{
-		$urls = [];
-		$iterator = 0;
-		foreach ($items as $url) {
-			if ($parted === true) {
-				if ($iterator < $pageOrder * $limit) {
-					$iterator++;
-					continue;
-				}
-
-				$limit--;
-				if ($limit < 0) {
-					break;
-				}
-			}
-
-			$urls[] = $url;
-		}
-
-		return $this->renderUrls($urls);
+		return $this->renderUrls(Paginator::process($items, $parted, $page, $limit));
 	}
 
 
