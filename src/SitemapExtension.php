@@ -29,11 +29,11 @@ final class SitemapExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$builder->addDefinition('baraja.sitemapXmlRenderer')
+		$builder->addDefinition($this->prefix('sitemapXmlRenderer'))
 			->setFactory(SitemapXmlRenderer::class)
 			->setAutowired(SitemapXmlRenderer::class);
 
-		$generator = $builder->addDefinition('baraja.sitemapGenerator')
+		$generator = $builder->addDefinition($this->prefix('sitemapGenerator'))
 			->setFactory(SitemapGenerator::class)
 			->setAutowired(SitemapGenerator::class)
 			->addSetup('?->setSitemapRenderer(?)', ['@self', '@' . SitemapXmlRenderer::class]);
