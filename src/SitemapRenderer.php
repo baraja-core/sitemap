@@ -10,5 +10,5 @@ interface SitemapRenderer
 	/**
 	 * @param SitemapItem[] $items
 	 */
-	public function render(array $items, bool $parted = false, int $page = 0, int $limit = 100): string;
+	public function render(array $items): string;
 }

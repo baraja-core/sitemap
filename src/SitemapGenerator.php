@@ -43,7 +43,7 @@ final class SitemapGenerator
 			$items[] = new SitemapItem((string) $item['url'], $item['lastModificationDate'] ?? null);
 		}
 
-		return ($this->sitemapRenderer ?? new SitemapXmlRenderer)->render($items);
+		return ($this->sitemapRenderer ?? new SitemapXmlRenderer)->render(Paginator::process($items));
 	}
 
 

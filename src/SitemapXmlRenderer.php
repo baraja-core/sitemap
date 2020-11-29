@@ -9,15 +9,6 @@ final class SitemapXmlRenderer implements SitemapRenderer
 {
 
 	/**
-	 * @param SitemapItem[] $items
-	 */
-	public function render(array $items, bool $parted = false, int $page = 0, int $limit = 100): string
-	{
-		return $this->renderUrls(Paginator::process($items, $parted, $page, $limit));
-	}
-
-
-	/**
 	 * The method accepts an array of URLs and returns a valid XML sitemap.
 	 *
 	 * A simple and very fast method for generating an XML file.
@@ -26,15 +17,15 @@ final class SitemapXmlRenderer implements SitemapRenderer
 	 * without relying on another library. During generation, special characters
 	 * are automatically escaped, the output is always valid and treated against an XSS attack.
 	 *
-	 * @param SitemapItem[] $urls
+	 * @param SitemapItem[] $items
 	 */
-	private function renderUrls(array $urls): string
+	public function render(array $items): string
 	{
 		$return = [];
-		foreach ($urls as $url) {
+		foreach ($items as $item) {
 			$return[] = '<url>'
-				. '<loc>' . htmlspecialchars($url->getUrl(), ENT_QUOTES) . '</loc>'
-				. (($lastMod = $url->getLastModificationDate()) !== null
+				. '<loc>' . htmlspecialchars($item->getUrl(), ENT_QUOTES) . '</loc>'
+				. (($lastMod = $item->getLastModificationDate()) !== null
 					? '<lastmod>' . htmlspecialchars($lastMod->format('Y-m-d\TH:i:sP'), ENT_QUOTES) . '</lastmod>'
 					: ''
 				) . '</url>';
