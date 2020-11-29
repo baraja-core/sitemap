@@ -7,6 +7,13 @@ namespace Baraja\Sitemap;
 
 final class Paginator
 {
+	/** @throws \Error */
+	public function __construct()
+	{
+		throw new \Error('Class ' . get_class($this) . ' is static and cannot be instantiated.');
+	}
+
+
 	/**
 	 * @param SitemapItem[] $items
 	 * @return SitemapItem[]
