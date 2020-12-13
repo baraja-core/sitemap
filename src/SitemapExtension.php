@@ -28,6 +28,8 @@ final class SitemapExtension extends CompilerExtension
 	public function beforeCompile(): void
 	{
 		$builder = $this->getContainerBuilder();
+		/** @var mixed[] $config */
+		$config = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('sitemapXmlRenderer'))
 			->setFactory(SitemapXmlRenderer::class)
@@ -39,15 +41,14 @@ final class SitemapExtension extends CompilerExtension
 			->addSetup('?->setSitemapRenderer(?)', ['@self', '@' . SitemapXmlRenderer::class]);
 
 		$configValidator = new Config;
-		if (isset($this->config['cacheExpirationTime']) === true) {
-			if ($configValidator->setCacheExpirationTime((string) $this->config['cacheExpirationTime'])->getCacheExpirationTime() !== $this->config['cacheExpirationTime']) {
-				throw new \RuntimeException('Cache expiration time "' . $this->config['cacheExpirationTime'] . '" is not valid.');
+		if (isset($config['cacheExpirationTime']) === true) {
+			if ($configValidator->setCacheExpirationTime((string) $config['cacheExpirationTime'])->getCacheExpirationTime() !== $config['cacheExpirationTime']) {
+				throw new \RuntimeException('Cache expiration time "' . $config['cacheExpirationTime'] . '" is not valid.');
 			}
-			$generator->addSetup('?->getConfig()->setCacheExpirationTime(?)', ['@self', $this->config['cacheExpirationTime']]);
+			$generator->addSetup('?->getConfig()->setCacheExpirationTime(?)', ['@self', $config['cacheExpirationTime']]);
 		}
-
-		if (isset($this->config['urlLoader']) === true) {
-			$urlLoader = $builder->getDefinitionByType($this->config['urlLoader']);
+		if (isset($config['urlLoader']) === true) {
+			$urlLoader = $builder->getDefinitionByType((string) $config['urlLoader']);
 			$generator->addSetup('?->setSitemapUrlLoader(?)', ['@self', '@' . $urlLoader->getType()]);
 		}
 	}
@@ -78,7 +79,7 @@ final class SitemapExtension extends CompilerExtension
 			. "\t\t" . 'die;' . "\n"
 			. "\t" . '}' . "\n"
 			. '})();', [
-				$this->config['route'],
+				$this->config['route'] ?? 'sitemap.xml',
 				$generator->getName(),
 				$localization->getName(),
 				$response->getName(),
