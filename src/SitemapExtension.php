@@ -69,6 +69,9 @@ final class SitemapExtension extends CompilerExtension
 		/** @var ServiceDefinition $localization */
 		$localization = $this->getContainerBuilder()->getDefinitionByType(Localization::class);
 
+		/** @var mixed[] $config */
+		$config = $this->getConfig();
+
 		$class->getMethod('initialize')->addBody(
 			'// sitemap.' . "\n"
 			. '(function () {' . "\n"
@@ -79,7 +82,7 @@ final class SitemapExtension extends CompilerExtension
 			. "\t\t" . 'die;' . "\n"
 			. "\t" . '}' . "\n"
 			. '})();', [
-				$this->config['route'] ?? 'sitemap.xml',
+				$config['route'] ?? 'sitemap.xml',
 				$generator->getName(),
 				$localization->getName(),
 				$response->getName(),
