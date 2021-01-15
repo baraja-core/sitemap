@@ -6,7 +6,7 @@ namespace Baraja\Sitemap;
 
 
 use Nette\Caching\Cache;
-use Nette\Caching\IStorage;
+use Nette\Caching\Storage;
 
 final class SitemapGenerator
 {
@@ -21,7 +21,7 @@ final class SitemapGenerator
 	private ?SitemapRenderer $sitemapRenderer = null;
 
 
-	public function __construct(IStorage $storage, ?UrlLoader $urlLoader = null)
+	public function __construct(Storage $storage, ?UrlLoader $urlLoader = null)
 	{
 		$this->config = new Config;
 		$this->cache = new Cache($storage, 'sitemap');
