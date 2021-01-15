@@ -12,7 +12,7 @@ final class SitemapGenerator
 {
 	private Config $config;
 
-	private Cache $cache;
+	private ?Cache $cache;
 
 	private ?UrlLoader $commonUrlLoader;
 
@@ -21,10 +21,10 @@ final class SitemapGenerator
 	private ?SitemapRenderer $sitemapRenderer = null;
 
 
-	public function __construct(Storage $storage, ?UrlLoader $urlLoader = null)
+	public function __construct(?Storage $storage = null, ?UrlLoader $urlLoader = null)
 	{
 		$this->config = new Config;
-		$this->cache = new Cache($storage, 'sitemap');
+		$this->cache = $storage === null ? null : new Cache($storage, 'sitemap');
 		$this->commonUrlLoader = $urlLoader;
 	}
 
@@ -55,20 +55,27 @@ final class SitemapGenerator
 	 */
 	public function getSitemap(string $locale): string
 	{
-		if (($sitemap = $this->cache->load($key = 'sitemap.' . $locale . '.xml')) === null) {
+		$processLogic = function (string $locale): string {
 			try {
-				$this->cache->save($key, $sitemap = $this->generate($locale), [
-					Cache::EXPIRE => $this->config->getCacheExpirationTime(),
-					Cache::TAGS => ['sitemap-' . $locale, 'sitemap'],
-				]);
+				return $this->generate($locale);
 			} catch (\RuntimeException $e) {
 				throw $e;
 			} catch (\Throwable $e) {
 				throw new SitemapException('Can not create sitemap: ' . $e->getMessage(), 500, $e);
 			}
+		};
+
+		if ($this->cache === null) {
+			return $processLogic($locale);
+		}
+		if (($sitemap = $this->cache->load($key = 'sitemap.' . $locale . '.xml')) === null) {
+			$this->cache->save($key, $sitemap = $processLogic($locale), [
+				Cache::EXPIRE => $this->config->getCacheExpirationTime(),
+				Cache::TAGS => ['sitemap-' . $locale, 'sitemap'],
+			]);
 		}
 
-		return $sitemap;
+		return (string) $sitemap;
 	}
 
 
@@ -98,6 +105,9 @@ final class SitemapGenerator
 
 	public function clearCache(?string $locale = null): void
 	{
+		if ($this->cache === null) {
+			return;
+		}
 		$this->cache->clean($locale === null
 			? [Cache::ALL => true]
 			: [Cache::TAGS => ['sitemap-' . $locale]]
