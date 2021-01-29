@@ -108,9 +108,10 @@ final class SitemapGenerator
 		if ($this->cache === null) {
 			return;
 		}
-		$this->cache->clean($locale === null
+		$this->cache->clean(
+			$locale === null
 			? [Cache::ALL => true]
-			: [Cache::TAGS => ['sitemap-' . $locale]]
+			: [Cache::TAGS => ['sitemap-' . $locale]],
 		);
 	}
 }

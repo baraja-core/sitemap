@@ -81,12 +81,13 @@ final class SitemapExtension extends CompilerExtension
 			. "\t\t" . 'echo $sitemap;' . "\n"
 			. "\t\t" . 'die;' . "\n"
 			. "\t" . '}' . "\n"
-			. '})();', [
+			. '})();',
+			[
 				$config['route'] ?? 'sitemap.xml',
 				$generator->getName(),
 				$localization->getName(),
 				$response->getName(),
-			]
+			],
 		);
 	}
 }

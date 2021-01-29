@@ -7,7 +7,6 @@ namespace Baraja\Sitemap;
 
 final class SitemapXmlRenderer implements SitemapRenderer
 {
-
 	/**
 	 * The method accepts an array of URLs and returns a valid XML sitemap.
 	 *
