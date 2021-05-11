@@ -18,8 +18,11 @@ final class Config
 
 	public function setCacheExpirationTime(string $time): self
 	{
-		if (!preg_match('/^(?:\d+\s+(?:seconds?|minutes?|hours?|days?|weeks?|months?|years?)(?:$|\s+))+$/', $time = strtolower(trim($time)))) {
-			throw new \InvalidArgumentException('Expiration time "' . $time . '" is invalid. Did you mean format "5 minutes"?');
+		$time = strtolower(trim($time));
+		if (!preg_match('/^(?:\d+\s+(?:seconds?|minutes?|hours?|days?|weeks?|months?|years?)(?:$|\s+))+$/', $time)) {
+			throw new \InvalidArgumentException(
+				'Expiration time "' . $time . '" is invalid. Did you mean format "5 minutes"?',
+			);
 		}
 
 		$this->cacheExpirationTime = $time;

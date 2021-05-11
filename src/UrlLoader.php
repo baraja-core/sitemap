@@ -14,7 +14,7 @@ interface UrlLoader
 	 *    lastModificationDate (\DateTime|null)
 	 * ]
 	 *
-	 * @return mixed[][]
+	 * @return array<int, array<string, mixed>>
 	 */
 	public function getSitemapItems(string $locale): array;
 }
