@@ -42,7 +42,7 @@ final class SitemapGenerator
 			}
 			$items[] = new SitemapItem(
 				url: (string) $item['url'],
-			 	lastModificationDate: $item['lastModificationDate'] ?? null,
+				lastModificationDate: $item['lastModificationDate'] ?? null,
 			);
 		}
 
