@@ -9,6 +9,21 @@ Simple sitemap generator with robust and performance implementation.
 - Allows custom implementation of UrlLoader and specification of custom link sources,
 - The generated map is automatically cached and updated without the need to use cron.
 
+📦 Installation
+---------------
+
+It's best to use [Composer](https://getcomposer.org) for installation, and you can also find the package on
+[Packagist](https://packagist.org/packages/baraja-core/sitemap) and
+[GitHub](https://github.com/baraja-core/sitemap).
+
+To install, simply use the command:
+
+```shell
+$ composer require baraja-core/sitemap
+```
+
+You can use the package manually by creating an instance of the internal classes, or register a DIC extension to link the services directly to the Nette Framework.
+
 Basic description
 ------------------
 

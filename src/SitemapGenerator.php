@@ -14,24 +14,24 @@ final class SitemapGenerator
 
 	private ?Cache $cache;
 
-	private ?UrlLoader $commonUrlLoader;
-
 	private ?UrlLoader $customUrlLoader = null;
 
 	private ?SitemapRenderer $sitemapRenderer = null;
 
 
-	public function __construct(?Storage $storage = null, ?UrlLoader $urlLoader = null)
-	{
+	public function __construct(
+		?Storage $storage = null,
+		private ?UrlLoader $commonUrlLoader = null
+	) {
 		$this->config = new Config;
 		$this->cache = $storage === null ? null : new Cache($storage, 'sitemap');
-		$this->commonUrlLoader = $urlLoader;
 	}
 
 
 	public function generate(string $locale): string
 	{
-		if (($urlLoader = $this->customUrlLoader ?? $this->commonUrlLoader) === null) {
+		$urlLoader = $this->customUrlLoader ?? $this->commonUrlLoader;
+		if ($urlLoader === null) {
 			throw new \LogicException('Sitemap URL loader is not defined. Did you implement URL loader for this project?');
 		}
 
@@ -40,7 +40,10 @@ final class SitemapGenerator
 			if (isset($item['url']) === false) {
 				throw new \RuntimeException('Invalid SitemapItem: Key "url" is required.');
 			}
-			$items[] = new SitemapItem((string) $item['url'], $item['lastModificationDate'] ?? null);
+			$items[] = new SitemapItem(
+				url: (string) $item['url'],
+				lastModificationDate: $item['lastModificationDate'] ?? null,
+			);
 		}
 
 		return ($this->sitemapRenderer ?? new SitemapXmlRenderer)->render(Paginator::process($items));
@@ -68,8 +71,10 @@ final class SitemapGenerator
 		if ($this->cache === null) {
 			return $processLogic($locale);
 		}
-		if (($sitemap = $this->cache->load($key = 'sitemap.' . $locale . '.xml')) === null) {
-			$this->cache->save($key, $sitemap = $processLogic($locale), [
+		$sitemap = $this->cache->load($key = 'sitemap.' . $locale . '.xml');
+		if ($sitemap === null) {
+			$sitemap = $processLogic($locale);
+			$this->cache->save($key, $sitemap, [
 				Cache::EXPIRE => $this->config->getCacheExpirationTime(),
 				Cache::TAGS => ['sitemap-' . $locale, 'sitemap'],
 			]);
