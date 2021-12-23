@@ -29,7 +29,12 @@ final class SitemapExtension extends CompilerExtension
 	public function beforeCompile(): void
 	{
 		$builder = $this->getContainerBuilder();
-		/** @var mixed[] $config */
+		/** @var array{
+		 *    cacheExpirationTime?: string,
+		 *    route: string,
+		 *    urlLoader?: string
+		 * } $config
+		 */
 		$config = $this->getConfig();
 
 		$builder->addDefinition($this->prefix('sitemapXmlRenderer'))
@@ -43,14 +48,14 @@ final class SitemapExtension extends CompilerExtension
 
 		$configValidator = new Config;
 		if (isset($config['cacheExpirationTime']) === true) {
-			$configValidator->setCacheExpirationTime((string) $config['cacheExpirationTime']);
+			$configValidator->setCacheExpirationTime($config['cacheExpirationTime']);
 			if ($configValidator->getCacheExpirationTime() !== $config['cacheExpirationTime']) {
-				throw new \RuntimeException('Cache expiration time "' . $config['cacheExpirationTime'] . '" is not valid.');
+				throw new \RuntimeException(sprintf('Cache expiration time "%s" is not valid.', $config['cacheExpirationTime']));
 			}
 			$generator->addSetup('?->getConfig()->setCacheExpirationTime(?)', ['@self', $config['cacheExpirationTime']]);
 		}
 		if (isset($config['urlLoader']) === true) {
-			$urlLoader = $builder->getDefinitionByType((string) $config['urlLoader']);
+			$urlLoader = $builder->getDefinitionByType($config['urlLoader']);
 			$generator->addSetup('?->setSitemapUrlLoader(?)', ['@self', '@' . $urlLoader->getType()]);
 		}
 	}

@@ -21,7 +21,7 @@ final class SitemapGenerator
 
 	public function __construct(
 		?Storage $storage = null,
-		private ?UrlLoader $commonUrlLoader = null
+		private ?UrlLoader $commonUrlLoader = null,
 	) {
 		$this->config = new Config;
 		$this->cache = $storage === null ? null : new Cache($storage, 'sitemap');
@@ -73,7 +73,7 @@ final class SitemapGenerator
 		}
 		$key = 'sitemap.' . $locale . '.xml';
 		$sitemap = $this->cache->load($key);
-		if ($sitemap === null) {
+		if (is_string($sitemap) === false) {
 			$sitemap = $processLogic($locale);
 			$this->cache->save($key, $sitemap, [
 				Cache::EXPIRE => $this->config->getCacheExpirationTime(),
@@ -81,7 +81,7 @@ final class SitemapGenerator
 			]);
 		}
 
-		return (string) $sitemap;
+		return $sitemap;
 	}
 
 

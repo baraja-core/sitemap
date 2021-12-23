@@ -22,7 +22,7 @@ final class Paginator
 		array $items,
 		bool $parted = false,
 		int $page = 0,
-		int $limit = 100
+		int $limit = 100,
 	): array {
 		$urls = [];
 		$iterator = 0;
