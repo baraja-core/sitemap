@@ -10,7 +10,7 @@ final class Paginator
 	/** @throws \Error */
 	public function __construct()
 	{
-		throw new \Error('Class ' . static::class . ' is static and cannot be instantiated.');
+		throw new \Error(sprintf('Class "%s" is static and cannot be instantiated.', static::class));
 	}
 
 

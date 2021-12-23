@@ -43,7 +43,8 @@ final class SitemapExtension extends CompilerExtension
 
 		$configValidator = new Config;
 		if (isset($config['cacheExpirationTime']) === true) {
-			if ($configValidator->setCacheExpirationTime((string) $config['cacheExpirationTime'])->getCacheExpirationTime() !== $config['cacheExpirationTime']) {
+			$configValidator->setCacheExpirationTime((string) $config['cacheExpirationTime']);
+			if ($configValidator->getCacheExpirationTime() !== $config['cacheExpirationTime']) {
 				throw new \RuntimeException('Cache expiration time "' . $config['cacheExpirationTime'] . '" is not valid.');
 			}
 			$generator->addSetup('?->getConfig()->setCacheExpirationTime(?)', ['@self', $config['cacheExpirationTime']]);

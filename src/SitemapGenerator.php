@@ -41,7 +41,7 @@ final class SitemapGenerator
 				throw new \RuntimeException('Invalid SitemapItem: Key "url" is required.');
 			}
 			$items[] = new SitemapItem(
-				url: (string) $item['url'],
+				url: $item['url'],
 				lastModificationDate: $item['lastModificationDate'] ?? null,
 			);
 		}
@@ -64,14 +64,15 @@ final class SitemapGenerator
 			} catch (\RuntimeException $e) {
 				throw $e;
 			} catch (\Throwable $e) {
-				throw new SitemapException('Can not create sitemap: ' . $e->getMessage(), 500, $e);
+				throw new SitemapException(sprintf('Can not create sitemap: %s', $e->getMessage()), 500, $e);
 			}
 		};
 
 		if ($this->cache === null) {
 			return $processLogic($locale);
 		}
-		$sitemap = $this->cache->load($key = 'sitemap.' . $locale . '.xml');
+		$key = 'sitemap.' . $locale . '.xml';
+		$sitemap = $this->cache->load($key);
 		if ($sitemap === null) {
 			$sitemap = $processLogic($locale);
 			$this->cache->save($key, $sitemap, [
