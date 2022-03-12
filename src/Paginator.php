@@ -10,7 +10,7 @@ final class Paginator
 	/** @throws \Error */
 	public function __construct()
 	{
-		throw new \Error('Class ' . static::class . ' is static and cannot be instantiated.');
+		throw new \Error(sprintf('Class "%s" is static and cannot be instantiated.', static::class));
 	}
 
 
@@ -22,7 +22,7 @@ final class Paginator
 		array $items,
 		bool $parted = false,
 		int $page = 0,
-		int $limit = 100
+		int $limit = 100,
 	): array {
 		$urls = [];
 		$iterator = 0;

@@ -11,13 +11,13 @@ final class SitemapItem
 {
 	private string $url;
 
-	private ?\DateTime $lastModificationDate;
+	private ?\DateTimeInterface $lastModificationDate;
 
 
-	public function __construct(string $url, ?\DateTime $lastModificationDate = null)
+	public function __construct(string $url, ?\DateTimeInterface $lastModificationDate = null)
 	{
 		if (Validators::isUrl($url) === false) {
-			throw new \InvalidArgumentException('Location "' . $url . '" is not valid absolute URL.');
+			throw new \InvalidArgumentException(sprintf('Location "%s" is not valid absolute URL.', $url));
 		}
 
 		$this->url = $url;
@@ -31,7 +31,7 @@ final class SitemapItem
 	}
 
 
-	public function getLastModificationDate(): ?\DateTime
+	public function getLastModificationDate(): ?\DateTimeInterface
 	{
 		return $this->lastModificationDate;
 	}

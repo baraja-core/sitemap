@@ -22,10 +22,11 @@ final class SitemapXmlRenderer implements SitemapRenderer
 	{
 		$return = [];
 		foreach ($items as $item) {
+			$lastMod = $item->getLastModificationDate();
 			$return[] = '<url>'
-				. '<loc>' . htmlspecialchars($item->getUrl(), ENT_QUOTES) . '</loc>'
-				. (($lastMod = $item->getLastModificationDate()) !== null
-					? '<lastmod>' . htmlspecialchars($lastMod->format('Y-m-d\TH:i:sP'), ENT_QUOTES) . '</lastmod>'
+				. sprintf('<loc>%s</loc>', htmlspecialchars($item->getUrl(), ENT_QUOTES))
+				. ($lastMod !== null
+					? sprintf('<lastmod>%s</lastmod>', htmlspecialchars($lastMod->format('Y-m-d\TH:i:sP'), ENT_QUOTES))
 					: ''
 				) . '</url>';
 		}

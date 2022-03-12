@@ -21,7 +21,7 @@ final class SitemapGenerator
 
 	public function __construct(
 		?Storage $storage = null,
-		private ?UrlLoader $commonUrlLoader = null
+		private ?UrlLoader $commonUrlLoader = null,
 	) {
 		$this->config = new Config;
 		$this->cache = $storage === null ? null : new Cache($storage, 'sitemap');
@@ -41,7 +41,7 @@ final class SitemapGenerator
 				throw new \RuntimeException('Invalid SitemapItem: Key "url" is required.');
 			}
 			$items[] = new SitemapItem(
-				url: (string) $item['url'],
+				url: $item['url'],
 				lastModificationDate: $item['lastModificationDate'] ?? null,
 			);
 		}
@@ -64,15 +64,16 @@ final class SitemapGenerator
 			} catch (\RuntimeException $e) {
 				throw $e;
 			} catch (\Throwable $e) {
-				throw new SitemapException('Can not create sitemap: ' . $e->getMessage(), 500, $e);
+				throw new SitemapException(sprintf('Can not create sitemap: %s', $e->getMessage()), 500, $e);
 			}
 		};
 
 		if ($this->cache === null) {
 			return $processLogic($locale);
 		}
-		$sitemap = $this->cache->load($key = 'sitemap.' . $locale . '.xml');
-		if ($sitemap === null) {
+		$key = 'sitemap.' . $locale . '.xml';
+		$sitemap = $this->cache->load($key);
+		if (is_string($sitemap) === false) {
 			$sitemap = $processLogic($locale);
 			$this->cache->save($key, $sitemap, [
 				Cache::EXPIRE => $this->config->getCacheExpirationTime(),
@@ -80,7 +81,7 @@ final class SitemapGenerator
 			]);
 		}
 
-		return (string) $sitemap;
+		return $sitemap;
 	}
 
 
